@@ -1,0 +1,212 @@
+</div>
+</div>
+</div>
+
+<footer id="footer1" style="position:fixed; left:0px; bottom:0px; width:100%; height:55px; background-color:rgba(255,255,255,0.65)">
+	<div>
+		<form action="" id="chatio">
+			<input id="m" autocomplete="off" class="form-control inputMessage" style="width:70%; float:left; margin-right:20px;" />
+			<button class="btn" style="display:none">Send</button>
+			<button class="btn" id="btn-img">
+				<i class="fa fa-file-image-o"></i>
+			</button>
+			<button class="btn" id="btn-href">
+				<i class="fa fa-link"></i>
+			</button>
+		</form>
+	</div>
+	<div class="clearfix"></div>
+</footer>
+</div>
+</div>
+
+<script src="../vendors/jquery/dist/jquery.min.js"></script>
+<script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../vendors/fastclick/lib/fastclick.js"></script>
+<script src="../vendors/nprogress/nprogress.js"></script>
+
+<script src="../build/js/custom.min.js"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="../vendors/jquery-1.11.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/intro.js"></script>
+<script>
+	function anonIntro() {
+		var intro = introJs();
+		intro.setOptions({
+			steps: [
+				{
+					element: document.querySelector('#chatio'),
+					intro: "Khi chat ẩn danh, người dùng không thể gửi hình ảnh và link",
+					disableInteraction: true
+				},
+				{
+					//element: document.querySelector('#sidebar_button'),
+					intro: "Đồng thời người dùng cũng không thể truy cập profile và option của mình",
+					disableInteraction: true
+				}
+			]
+		});
+		intro.start().oncomplete(function () {
+			window.location.href = 'login?tutorial2=yes';
+		});
+	}
+
+	function userIntro() {
+		var intro = introJs();
+		intro.setOptions({
+			steps: [
+				{
+					element: document.querySelector('#chatio'),
+					intro: "Sau khi đăng kí, người dùng có thể gửi hình ảnh và link",
+					disableInteraction: true
+				},
+				{
+					//element: document.querySelector('#sidebar_button'),
+					element: document.querySelector('#thongbao'),
+					intro: "Các thông báo của quản trị viên sẽ được hiển thị tại đây"
+				},
+				{
+					element: document.querySelector('#sidebar_profile'),
+					intro: "Nhấp vào đây để truy cập hồ sơ người dùng",
+					disableInteraction: true
+				}
+			]
+		});
+		intro.start().oncomplete(function () {
+			window.location.href = 'profile?tutorial_profile=yes&id='+$('#username').text();
+		});
+	}
+
+	function optionsIntro() {
+		var intro = introJs();
+		intro.setOptions({
+			steps: [
+				{
+					element: document.querySelector('#option-form'),
+					intro: "Tại đây, người dùng có thể thay đổi thông tin trong hồ sơ của mình",
+					disableInteraction: true
+				},
+				{
+					element: document.querySelector('#option-form2'),
+					intro: "Hoặc thay đổi mật khẩu",
+					disableInteraction: true
+				},
+				{
+					intro: "Kết thúc tour giới thiệu"
+				}
+			]
+		});
+		intro.start().oncomplete(function () {
+			window.location.href = 'logout';
+		});
+	}
+
+	function profileIntro() {
+		var intro = introJs();
+		intro.setOptions({
+			steps: [
+				{
+					element: document.querySelector('#profile_left'),
+					intro: "Thông tin cơ bản về người dùng",
+					disableInteraction: true
+				},
+				{
+					element: document.querySelector('#profile_right'),
+					intro: "Các thông tin khác như: danh sách bạn bè, giới thiệu cá nhân",
+					disableInteraction: true
+				},
+				{
+					element: document.querySelector('#addfriend'),
+					intro: "Chọn Add Friend trong hồ sơ của người dùng khác để thêm họ vào danh sách bạn bè",
+					disableInteraction: true
+				},
+				{
+					element: document.querySelector('#sidebar_options'),
+					intro: "Nhấp vào đây để truy cập tùy chọn",
+					disableInteraction: true
+				}
+			]
+		});
+		intro.start().oncomplete(function () {
+			window.location.href = 'options?tutorial_options=yes';
+		});
+	}
+
+	$(function () {
+		var socket = io();
+		var username = $('#username').text();
+		var chatcolor = '<font>';
+		if ($('#type').text() == 'User') chatcolor = '<a style="color:blue" href="/profile?id=' + username + '">';
+		if ($('#type').text() == 'Anonymous') {
+			$('#btn-img').hide();
+			$('#btn-href').hide();
+			$('#sidebar_profile').hide();
+			$('#sidebar_options').hide();
+			$('#top_profile').hide();
+			$('#top_options').hide();
+		}
+		if ($('#type').text() == 'Banned') {
+			$('#btn-img').hide();
+			$('#btn-href').hide();
+			$('form#chatio').hide();
+		}
+
+		$('form#chatio').submit(function () {
+			socket.emit('room', chatcolor + username + '</a>: ' + $('#m').val());
+			$('#m').val('');
+			return false;
+		});
+		socket.on('room', function (msg) {
+			$('#messages').append($('<li>').html(msg));
+		});
+
+		//if($('#type').text() == 'Administrator') $('#footer1').remove();
+
+		if (RegExp('tutorial_anonymous', 'gi').test(window.location.search)) {
+			anonIntro();
+		}
+
+		if (RegExp('tutorial_user', 'gi').test(window.location.search)) {
+			userIntro();
+		}
+
+		if (RegExp('tutorial_options', 'gi').test(window.location.search)) {
+			optionsIntro();
+		}
+
+		if (RegExp('tutorial_profile', 'gi').test(window.location.search)) {
+			profileIntro();
+		}
+	});
+
+	$('#btn-img').click(function () {
+		var img = prompt('Link đến hình ảnh', 'http://');
+		$('#m').val('<img src="' + img + '"></img>');
+	});
+
+	$('#btn-href').click(function () {
+		var href = prompt('Liên kết', 'http://');
+		$('#m').val('<a href="' + href + '" style="color:red">' + href + '</a>');
+	});
+</script>
+<!--<script src="../vendors/socket.io-client/main.js"></script>-->
+
+<script>
+	function img_popup(width, height, url) {
+		var leftPosition, topPosition;
+		if (typeof width == 'undefined') width = 400;
+		if (typeof height == 'undefined') height = window.screen.height / 2;
+		if (typeof url == 'undefined') url = 'https://www.upsieutoc.com/';
+		//Allow for borders.
+		leftPosition = (window.screen.width / 2) - ((width / 2) + 10);
+		//Allow for title and status bars.
+		topPosition = (window.screen.height / 2) - ((height / 2) + 50);
+		//Open the window.
+		window.open(url, "Upload", "status=no,height=" + height + ",width=" + width + ",resizable=yes,left=" + leftPosition + ",top=" + topPosition + ",screenX=" + leftPosition + ",screenY=" + topPosition + ",toolbar=no,menubar=no,scrollbars=no,location=no,directories=no");
+		return false;
+	}
+</script>
+</body>
+
+</html>

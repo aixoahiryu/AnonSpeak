@@ -1,0 +1,14 @@
+{
+    "name": "F.A.P.S.",
+    "version": "0.0.1",
+    "description": "FlareTech Assisted Pentesting System",
+    "main": "server.js",
+    "author": "Cao Dinh Nghi",
+    "dependencies": {
+        "body-parser": "^1.18.2",
+        "cookie-parser": "^1.4.3",
+        "express": "^4.16.2",
+        "multer": "^1.3.0",
+        "socket.io": "^2.1.1"
+    }
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- Meta, title, CSS, favicons, etc. -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Anon Speak</title>
+
+	<!-- Bootstrap -->
+	<link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<!-- NProgress -->
+	<link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+	<!-- Animate.css -->
+	<link href="../vendors/animate.css/animate.min.css" rel="stylesheet">
+
+	<!-- Custom Theme Style -->
+	<link href="../build/css/custom.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/introjs.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js@2.9.3/themes/introjs-modern.css">
+</head>
+
+<body class="login" style="color:white; background-image:url('../build/images/bg-01.jpg'); background-size: cover">
+	<div>
+		<a class="hiddenanchor" id="signin"></a>
+
+		<div class="login_wrapper">
+
+			<div class="animate form login_form">
+				<section class="login_content">
+					<form action="login" method="post" enctype="application/x-www-form-urlencoded" id="form1">
+						<h1>Chat ẩn danh</h1>
+						<span>Người chat ẩn danh không thể gửi link và hình ảnh</span>
+						<div>
+							<input type="text" class="form-control" name="username" required="" value="Anonymous0" />
+							<a href="/login?tutorial=yes" class="pull-right" style="color:white">Bắt đầu hướng dẫn</a>
+						</div>
+						<!--<div>
+                <input type="password" class="form-control" placeholder="password" name="password" required="" />
+              </div> -->
+						<div>
+							<input type="submit" class="btn btn-default submit" name="B1" value="Continue" />
+						</div>
+
+						<div class="clearfix"></div>
+
+						<div class="separator">
+
+
+							<div class="clearfix"></div>
+							<br />
+
+						</div>
+					</form>
+
+					<form action="login2" method="post" enctype="application/x-www-form-urlencoded" id="form2">
+						<h1>Đăng nhập</h1>
+						<div>
+							<input type="text" class="form-control" placeholder="username" name="username" required="" />
+						</div>
+						<div>
+							<input type="password" class="form-control" placeholder="password" name="password" required="" />
+						</div>
+						<div>
+							<input type="submit" class="btn btn-default submit" name="B1" value="Đăng nhập" />
+						</div>
+
+						<div class="clearfix"></div>
+
+						<div class="separator">
+
+
+							<div class="clearfix"></div>
+							<br />
+						</div>
+					</form>
+
+					<form action="register" method="post" enctype="application/x-www-form-urlencoded" id="form3">
+						<h1>Đăng kí</h1>
+						<div>
+							<input type="text" class="form-control" placeholder="username" name="username" required="" />
+						</div>
+						<div>
+							<input type="password" class="form-control" placeholder="password" name="password" required="" />
+						</div>
+						<div>
+							<input type="submit" class="btn btn-default submit" name="B1" value="Đăng kí" />
+						</div>
+
+						<div class="clearfix"></div>
+
+						<div class="separator">
+
+
+							<div class="clearfix"></div>
+							<br />
+						</div>
+					</form>
+				</section>
+			</div>
+
+
+		</div>
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/intro.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		function startIntro() {
+			var intro = introJs();
+			intro.setOptions({
+				steps: [
+					{
+						element: document.querySelector('#form1'),
+						intro: "Tại đây, bạn có thể đăng nhập ẩn danh",
+						disableInteraction: true
+					},
+					{
+						element: document.querySelector('#form3'),
+						intro: "Bạn cần đăng kí để sử dụng các chức năng gửi link và hình ảnh",
+						disableInteraction: true
+					},
+					{
+						element: document.querySelector('#form1'),
+						intro: "Bạn hãy chọn Continue để tiếp tục hướng dẫn"
+					}
+				]
+			});
+			intro.start();
+		}
+
+		function startIntro2() {
+			var intro = introJs();
+			intro.setOptions({
+				steps: [
+					{
+						intro: "Tiếp theo, bạn có thể đăng nhập hoặc đăng kí",
+					}
+				]
+			});
+			intro.start();
+		}
+
+		$(function () {
+			if (RegExp('tutorial', 'gi').test(window.location.search)) {
+				$("#form1").attr("action", "loginX");
+				startIntro();
+			}
+
+			if (RegExp('tutorial2', 'gi').test(window.location.search)) {
+				$("#form2").attr("action", "login2X");
+				$("#form3").attr("action", "registerX");
+				startIntro2();
+			}
+		})
+	</script>
+</body>
+
+</html>
