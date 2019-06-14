@@ -4,6 +4,9 @@
     "description": "FlareTech Assisted Pentesting System",
     "main": "server.js",
     "author": "Cao Dinh Nghi",
+	"scripts": {
+		"start": "node server",
+	},
     "dependencies": {
         "body-parser": "^1.18.2",
         "cookie-parser": "^1.4.3",
