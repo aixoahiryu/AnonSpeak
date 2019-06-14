@@ -4,7 +4,8 @@ var cookie1 = require("cookie-parser");
 var bodyParser = require("body-parser");
 var app = express();
 
-var server = app.listen(80, function () {
+const port = process.env.PORT || 80;
+var server = app.listen(port, function () {
 	var host = server.address().address;
 	var port = server.address().port;
 
