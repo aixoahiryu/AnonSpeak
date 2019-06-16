@@ -729,64 +729,48 @@ app.post('/admin/notice', function (req, res) {
 	res.redirect('/admin/notice');
 })
 
-/*
-var numUsers = 0;
+//----------------------API----------------------
+app.get('/api/update', function (req, res) {
 
-io.on('connection', (socket) => {
-	var addedUser = false;
+})
 
-	// when the client emits 'new message', this listens and executes
-	socket.on('new message', (data) => {
-		// we tell the client to execute 'new message'
-		socket.broadcast.emit('new message', {
-			username: socket.username,
-			message: data
-		});
-	});
+app.get('/api/message/:id', function (req, res) {
+	chatdata = fs.readFileSync('database/chatroom/' + req.query.id + '.txt');
+	res.send(chatdata);
+})
 
-	// when the client emits 'add user', this listens and executes
-	socket.on('add user', (username) => {
-		console.log(username);
-		if (addedUser) return;
+app.post('/api/message', function (req, res) {
+	io.emit('room' + req.body.room, req.body.msg);
+	fs.appendFileSync('database/chatroom/'+req.body.room+'.txt', '<li>' + req.body.msg + '</li> \r\n');
+	res.send('Success');
+})
 
-		// we store the username in the socket session for this client
-		socket.username = username;
-		++numUsers;
-		addedUser = true;
-		socket.emit('login', {
-			numUsers: numUsers
-		});
-		// echo globally (all clients) that a person has connected
-		socket.broadcast.emit('user joined', {
-			username: socket.username,
-			numUsers: numUsers
-		});
-	});
+app.get('/api/user/:id', function (req, res) {
+	var profile1 = fs.readFileSync('database/profile/' + req.query.id + '.json');
+	res.send(profile1);
+})
 
-	// when the client emits 'typing', we broadcast it to others
-	socket.on('typing', () => {
-		socket.broadcast.emit('typing', {
-			username: socket.username
-		});
-	});
+app.post('/api/user', function (req, res) {
+	var profile1 = fs.readFileSync('database/profile/' + req.body.username + '.json');
+	var json1 = JSON.parse(profile1);
 
-	// when the client emits 'stop typing', we broadcast it to others
-	socket.on('stop typing', () => {
-		socket.broadcast.emit('stop typing', {
-			username: socket.username
-		});
-	});
+	json1.avatar = req.body.profile.avatar;
+	json1.name = req.body.profile.name;
+	json1.address = req.body.profile.address;
+	json1.job = req.body.profile.job;
+	json1.website = req.body.profile.website;
+	json1.description = req.body.profile.description;
+	json1.p1 = req.body.profile.p1;
+	json1.p2 = req.body.profile.p2;
+	json1.p3 = req.body.profile.p3;
+	json1.p4 = req.body.profile.p4;
 
-	// when the user disconnects.. perform this
-	socket.on('disconnect', () => {
-		if (addedUser) {
-			--numUsers;
+	var userdata = JSON.stringify(json1);
+	fs.writeFileSync('database/profile/' + req.body.username + '.json', userdata);
+	res.send('Success');
+})
 
-			// echo globally that this client has left
-			socket.broadcast.emit('user left', {
-				username: socket.username,
-				numUsers: numUsers
-			});
-		}
-	});
-});*/
+app.post('/api/authenticate', function (req, res) {
+
+	res.send('Success');
+})
