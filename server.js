@@ -758,22 +758,53 @@ app.get('/api/user/:id', function (req, res) {
 })
 
 app.post('/api/user', function (req, res) {
-	var profile1 = fs.readFileSync('database/profile/' + req.body.username + '.json');
+	var profile1 = fs.readFileSync('database/profile/' + req.body.id + '.json');
+	var profile2 = req.body.profile;
 	var json1 = JSON.parse(profile1);
 
-	json1.avatar = req.body.profile.avatar;
-	json1.name = req.body.profile.name;
-	json1.address = req.body.profile.address;
-	json1.job = req.body.profile.job;
-	json1.website = req.body.profile.website;
-	json1.description = req.body.profile.description;
-	json1.p1 = req.body.profile.p1;
-	json1.p2 = req.body.profile.p2;
-	json1.p3 = req.body.profile.p3;
-	json1.p4 = req.body.profile.p4;
+	json1.avatar = profile2.avatar;
+	json1.name = profile2.name;
+	json1.address = profile2.address;
+	json1.job = profile2.job;
+	json1.website = profile2.website;
+	json1.description = profile2.description;
+	json1.p1 = profile2.p1;
+	json1.p2 = profile2.p2;
+	json1.p3 = profile2.p3;
+	json1.p4 = profile2.p4;
 
 	var userdata = JSON.stringify(json1);
-	fs.writeFileSync('database/profile/' + req.body.username + '.json', userdata);
+	fs.writeFileSync('database/profile/' + req.body.id + '.json', userdata, { flag: "a+" });
+	res.send('Success');
+})
+
+app.post('/api/password', function (req, res) {
+	var userdata = fs.readFileSync('database/account/' + req.body.id + '.json');
+	var json1 = JSON.parse(userdata);
+
+	if ((req.body.password_old == json1.password) && (req.body.password_1 == req.body.password_2)) {
+		json1.password = req.body.password_1;
+		var userdata = JSON.stringify(json1);
+		fs.writeFileSync('database/account/' + req.body.id + '.json', userdata);
+		res.send('Success');
+	}
+	else { res.send("Failed"); }
+})
+
+app.post('/api/add-friend', function (req, res) {
+	if (req.body.friendid != '' && fs.existsSync('database/account/' + req.body.id + '.json')) {
+		if (fs.existsSync('database/friendlist/' + req.body.id + '.json') == false) {
+			fs.appendFileSync('database/friendlist/' + req.body.id + '.json', req.body.friendid + ',', { flag: "a+" });
+		}
+		else {
+			var friendlist = fs.readFileSync('database/friendlist/' + req.body.id + '.json');
+			var friendarray = friendlist.toString().split(',');
+			if (friendarray.includes(req.body.friendid) == false) {
+				fs.appendFileSync('database/friendlist/' + req.body.id + '.json', req.body.friendid + ',');
+			}
+		}
+	}
+
 	res.send('Success');
 })
 
