@@ -1,10 +1,10 @@
 [
-	{"id": "room", "date": },
-	{"id": "room1", "date": },
-	{"id": "room2", "date": },
-	{"id": "room3", "date": },
-	{"id": "room4", "date": },
-	{"id": "room5", "date": },
-	{"id": "room6", "date": },
-	{"id": "room7", "date": },
+	{"id": "room", "date": ""},
+	{"id": "room1", "date": ""},
+	{"id": "room2", "date": ""},
+	{"id": "room3", "date": ""},
+	{"id": "room4", "date": ""},
+	{"id": "room5", "date": ""},
+	{"id": "room6", "date": ""},
+	{"id": "room7", "date": ""}
 ]

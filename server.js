@@ -731,11 +731,16 @@ app.post('/admin/notice', function (req, res) {
 
 //----------------------API----------------------
 app.get('/api/update', function (req, res) {
+	res.setHeader("Content-Type", "application/json");
 
+	var data1 = fs.readFileSync('database/update.json');
+	res.send(data1);
 })
 
 app.get('/api/message/:id', function (req, res) {
-	chatdata = fs.readFileSync('database/chatroom/' + req.query.id + '.txt');
+	res.setHeader("Content-Type", "application/json");
+
+	chatdata = fs.readFileSync('database/chatroom/' + req.params.id + '.txt');
 	res.send(chatdata);
 })
 
@@ -746,7 +751,9 @@ app.post('/api/message', function (req, res) {
 })
 
 app.get('/api/user/:id', function (req, res) {
-	var profile1 = fs.readFileSync('database/profile/' + req.query.id + '.json');
+	res.setHeader("Content-Type", "application/json");
+
+	var profile1 = fs.readFileSync('database/profile/' + req.params.id + '.json');
 	res.send(profile1);
 })
 
