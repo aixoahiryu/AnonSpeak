@@ -774,7 +774,7 @@ app.post('/api/user', function (req, res) {
 	json1.p4 = profile2.p4;
 
 	var userdata = JSON.stringify(json1);
-	fs.writeFileSync('database/profile/' + req.body.id + '.json', userdata, { flag: "a+" });
+	fs.writeFileSync('database/profile/' + req.body.id + '.json', userdata, { flag: "w+" });
 	res.send('Success');
 })
 
