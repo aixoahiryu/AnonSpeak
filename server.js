@@ -4,7 +4,11 @@ var cookie1 = require("cookie-parser");
 var bodyParser = require("body-parser");
 var app = express();
 
-const port = process.env.PORT || 80;
+var server_config = JSON.parse(fs.readFileSync("config.json"));
+const port = process.env.PORT || server_config.port;
+var server_mode = server_config.server_mode;
+var remote = server_config.remote;
+
 var server = app.listen(port, function () {
 	var host = server.address().address;
 	var port = server.address().port;
