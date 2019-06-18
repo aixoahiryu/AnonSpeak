@@ -813,6 +813,13 @@ app.post('/api/add-friend', function (req, res) {
 })
 
 app.post('/api/authenticate', function (req, res) {
-
-	res.send('Success');
+	res.set('Content-Type', 'Text/Html');
+	if (fs.existsSync('database/account/' + req.body.username + '.json')) {
+		var userdata = fs.readFileSync('database/account/' + req.body.username + '.json');
+		var json1 = JSON.parse(userdata);
+		if (req.body.password == json1.password) {
+			res.send('Success');
+		}
+	}
+	else { res.send("Login failed"); }
 })
