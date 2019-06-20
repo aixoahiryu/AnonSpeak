@@ -15,7 +15,7 @@ Room content:
    //  		$.get("https://anon-speak.herokuapp.com/api/message/" + json1.id, function(data,status){
   	// 			$('#message').html(data);
 			// });
-			var html1 = $.get("https://anon-speak.herokuapp.com/api/message/" + json1.id);
+			var html1 = $.get("api/message/" + json1.id);
 			$('#message').html(html1);
 			$('#message').append($('<li>').html("https://anon-speak.herokuapp.com/api/message/" + json1.id));
     	}
