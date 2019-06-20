@@ -21,7 +21,7 @@ Room content:
 
     if(json1.type == 'content'){
     	$('#message').html(unescape(json1.html));
-		
+		window.scrollTo(0,document.body.scrollHeight);
     }
 
     if(json1.type == 'message'){
