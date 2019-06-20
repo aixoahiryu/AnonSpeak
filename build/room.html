@@ -4,8 +4,20 @@ Room content:
 
 <script src="../vendors/jquery/dist/jquery.min.js"></script>
 <script>
+  let old_id = 0;
   document.addEventListener("message", function(event) {
   	json1 = JSON.parse(event.data);
-    $('#message').append($('<li>').html(json1.id));
+
+    if(json1.type == 'id'){
+    	if(json1.id != old_id){
+    		$('#message').append($('<li>').html(json1.id));
+    	}
+    }
+
+    if(json1.type == 'message'){
+  //   	$.get("x.php", function(data,status){
+  // 			$('#message').html(data);
+		// });
+    }
   });
 </script>
