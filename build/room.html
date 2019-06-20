@@ -9,22 +9,12 @@ Room content:
   	json1 = JSON.parse(event.data);
 
     if(json1.type == 'content'){
-    	// if(json1.id != this.old_id){
-   //  		this.old_id = json1.id;
-   //  		// $('#message').append($('<li>').html(json1.id));
-   //  		$.ajax({
-  	// 			url: "https://anon-speak.herokuapp.com/api/message/" + json1.id,
-  	// 			// dataType: 'jsonp',
-  	// 			success: function(data){
-   //  				$('#message').html(data);
-  	// 			}
-			// });
-			$('#message').append($('<li>').html("https://anon-speak.herokuapp.com/api/message/" + json1.id));
-    	// }
+    	$('#message').html(data.html);
+		
     }
 
     if(json1.type == 'message'){
-    	
+    	// $('#message').append($('<li>').html("https://anon-speak.herokuapp.com/api/message/" + json1.id));
     }
   });
 </script>
