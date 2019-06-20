@@ -9,7 +9,7 @@ Room content:
   	json1 = JSON.parse(event.data);
 
     if(json1.type == 'content'){
-    	$('#message').html(data.html);
+    	$('#message').html(json1.html);
 		
     }
 
