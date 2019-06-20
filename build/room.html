@@ -10,6 +10,7 @@ Room content:
 
     if(json1.type == 'id'){
     	if(json1.id != old_id){
+    		old_id = json1.id;
     		$('#message').append($('<li>').html(json1.id));
     	}
     }
