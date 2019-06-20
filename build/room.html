@@ -1,10 +1,10 @@
 Room content:
-<ul id="message">
+<ul id="message" style="list-style-type: none">
 </ul>
 
 <script src="../vendors/jquery/dist/jquery.min.js"></script>
 <script>
   document.addEventListener("message", function(data) {
-    $('#message').append($('<li>').html(data.data));
+    $('#message').append($('<li>').html(data.data.id));
   });
 </script>
