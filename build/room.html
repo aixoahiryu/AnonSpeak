@@ -5,6 +5,6 @@ Room content:
 <script src="../vendors/jquery/dist/jquery.min.js"></script>
 <script>
   document.addEventListener("message", function(data) {
-    $('#message').append($('<li>').html(data));
+    $('#message').append($('<li>').html(data.data));
   });
 </script>
