@@ -4,8 +4,8 @@ Room content:
 
 <script src="../vendors/jquery/dist/jquery.min.js"></script>
 <script>
-  document.addEventListener("message", function(data) {
-  	json1 = JSON.parse(data);
+  document.addEventListener("message", function(event) {
+  	json1 = JSON.parse(event.data);
     $('#message').append($('<li>').html(json1.id));
   });
 </script>
