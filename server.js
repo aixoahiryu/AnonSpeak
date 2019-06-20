@@ -763,8 +763,9 @@ app.get('/api/user/:id', function (req, res) {
 
 app.post('/api/user', function (req, res) {
 	var profile1 = fs.readFileSync('database/profile/' + req.body.id + '.json');
-	var profile2 = req.body.profile;
 	var json1 = JSON.parse(profile1);
+	var json2 = JSON.parse(profile1);
+	var profile2 = json2.profile;
 
 	json1.avatar = profile2.avatar;
 	json1.name = profile2.name;
