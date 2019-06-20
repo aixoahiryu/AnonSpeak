@@ -14,7 +14,7 @@ Room content:
     		// $('#message').append($('<li>').html(json1.id));
     		$.ajax({
   				url: "https://anon-speak.herokuapp.com/api/message/" + json1.id,
-  				dataType: 'jsonp',
+  				// dataType: 'jsonp',
   				success: function(data){
     				$('#message').html(data);
   				}
