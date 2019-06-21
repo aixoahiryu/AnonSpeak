@@ -463,6 +463,9 @@ app.post('/options', function (req, res) {
 
 	var userdata = JSON.stringify(json1);
 	fs.writeFileSync('database/profile/' + req.cookies["username"] + '.json', userdata);
+	
+	io.emit('update', JSON.stringify( {"type":"profile", "id": req.cookies["username"]} ));
+
 	res.redirect('/options');
 })
 
@@ -478,7 +481,7 @@ app.post('/options2', function (req, res) {
 	}
 	else { res.send("Đổi mật khẩu không thành công"); }
 
-
+	io.emit('update', JSON.stringify( {"type":"account", "id": req.cookies["username"]} ));
 })
 
 //-------------Form---------------
@@ -754,14 +757,14 @@ app.post('/api/message', function (req, res) {
 	res.send('Success');
 })
 
-app.get('/api/user/:id', function (req, res) {
+app.get('/api/profile/:id', function (req, res) {
 	res.setHeader("Content-Type", "application/json");
 
 	var profile1 = fs.readFileSync('database/profile/' + req.params.id + '.json');
 	res.send(profile1);
 })
 
-app.post('/api/user', function (req, res) {
+app.post('/api/profile', function (req, res) {
 	var profile1 = fs.readFileSync('database/profile/' + req.body.id + '.json');
 	var profile2 = req.body.profile;
 	var json1 = JSON.parse(profile1);
@@ -782,7 +785,14 @@ app.post('/api/user', function (req, res) {
 	res.send('Success');
 })
 
-app.post('/api/password', function (req, res) {
+app.get('/api/account/:id', function (req, res) {
+	res.setHeader("Content-Type", "application/json");
+
+	var profile1 = fs.readFileSync('database/account/' + req.params.id + '.json');
+	res.send(profile1);
+})
+
+app.post('/api/account', function (req, res) {
 	var userdata = fs.readFileSync('database/account/' + req.body.id + '.json');
 	var json1 = JSON.parse(userdata);
 
