@@ -11,6 +11,7 @@
 <body>
 Room content:
 <ul id="message" style="list-style-type: none">
+  madcatcontent
 </ul>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -19,17 +20,12 @@ Room content:
   var old_id = 0;
   var socket = io();
 
-  var room = 'room1'
-  socket.on(room, function (msg) {
+  socket.on(madcatroom, function (msg) {
     $('#message').append($('<li>').html(msg));
   });
 
   document.addEventListener("message", function(event) {
   	json1 = JSON.parse(event.data);
-
-    if(json1.type == 'room'){
-      window.room = json1.room;
-    }
 
     if(json1.type == 'content'){
     	$('#message').html(unescape(json1.html));
@@ -38,7 +34,7 @@ Room content:
 
     if(json1.type == 'message'){
       // socket.emit('room', chatcolor + username + '</a>: ' + $('#m').val());
-      socket.emit(room, json1.message);
+      socket.emit(madcatroom, json1.message);
       // window.postMessage();
     }
   });

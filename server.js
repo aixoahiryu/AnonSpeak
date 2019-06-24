@@ -859,6 +859,17 @@ app.get('/api/mprofile/:id', function (req, res) {
 	}
 })
 
+app.get('/api/socket/:id', function (req, res) {
+	var panel = fs.readFileSync('build/room.html');
+	chatdata = fs.readFileSync('database/chatroom/' + req.params.id + '.txt');
+
+	panel = panel.toString().replace('madcatroom', '\'room' + req.params.id + '\'');
+	panel = panel.toString().replace('madcatroom', '\'room' + req.params.id + '\'');
+	panel = panel.toString().replace('madcatcontent', chatdata);
+
+	res.send(panel);
+})
+
 app.post('/api/authenticate', function (req, res) {
 	res.set('Content-Type', 'Text/Html');
 	if (fs.existsSync('database/account/' + req.body.username + '.json')) {
