@@ -13,11 +13,23 @@ Room content:
 <ul id="message" style="list-style-type: none">
 </ul>
 
+<script src="/socket.io/socket.io.js"></script>
 <script src="../vendors/jquery/dist/jquery.min.js"></script>
 <script>
   var old_id = 0;
+  var socket = io();
+
+  var room = 'room1'
+  socket.on(room, function (msg) {
+    $('#messages').append($('<li>').html(msg));
+  });
+
   document.addEventListener("message", function(event) {
   	json1 = JSON.parse(event.data);
+
+    if(json1.type == 'room'){
+      room = json1.room
+    }
 
     if(json1.type == 'content'){
     	$('#message').html(unescape(json1.html));
@@ -25,7 +37,8 @@ Room content:
     }
 
     if(json1.type == 'message'){
-    	// $('#message').append($('<li>').html("https://anon-speak.herokuapp.com/api/message/" + json1.id));
+      // socket.emit('room', chatcolor + username + '</a>: ' + $('#m').val());
+      socket.emit(room, chatcolor + username + '</a>: ' + $('#m').val());
     }
   });
 </script>
