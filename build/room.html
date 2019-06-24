@@ -27,6 +27,10 @@ Room content:
   document.addEventListener("message", function(event) {
   	json1 = JSON.parse(event.data);
 
+    if(json1.type == 'room'){
+      window.location.href = json1.room;
+    }
+
     if(json1.type == 'content'){
     	$('#message').html(unescape(json1.html));
 		window.scrollTo(0,document.body.scrollHeight);
