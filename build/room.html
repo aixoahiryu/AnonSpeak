@@ -17,8 +17,10 @@ Room content:
 <script src="/socket.io/socket.io.js"></script>
 <script src="../vendors/jquery/dist/jquery.min.js"></script>
 <script>
+  window.scrollTo(0,document.body.scrollHeight);
+//=========================================================
   var old_id = 0;
-  var socket = io("https://anon-speak.herokuapp.com/");
+  var socket = io();
 
   socket.on(madcatroom, function (msg) {
     $('#message').append($('<li>').html(msg));
