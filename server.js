@@ -30,7 +30,7 @@ var topmenu = fs.readFileSync('app/topmenu.html');
 var content = fs.readFileSync('app/content.html');
 var footer = fs.readFileSync('app/footer.html');
 
-function mainpage(panel, username, room, type) {
+function mainpage(panel, username, room, type, mode = 'normal') {
 	var sidebar2 = sidebar.toString().replace('madcat28651', username);
 	sidebar2 = sidebar2.toString().replace('User', type);
 	var topmenu2 = topmenu.toString().replace('madcat28651', username);
@@ -55,7 +55,12 @@ function mainpage(panel, username, room, type) {
 
 	topmenu2 = topmenu2.toString().replace('madcatnotice', NoticeList());
 	topmenu2 = topmenu2.toString().replace('noticenum', noticei);
-	return header + sidebar2 + topmenu2 + content + panel + footer2;
+	if(mode == 'normal'){
+		return header + sidebar2 + topmenu2 + content + panel + footer2;
+	}
+	else if(mode == 'mobile'){
+		return header + content + panel + footer2;
+	}
 }
 
 noticei = 0;
@@ -96,7 +101,7 @@ function makeitem(title, link, group) {
 </li>`;
 }
 
-function FriendList(id) {
+function FriendList(id, mode = 'normal') {
 	var friendlist = "";
 	var list1, list2;
 
@@ -121,21 +126,26 @@ function FriendList(id) {
 				userdata = fs.readFileSync('database/account/' + i + '.json');
 				var json2 = JSON.parse(userdata);
 				friendlist = friendlist + `<tr><td><img style="max-width:50px" src="` + json1.avatar + `">
-		<td>`+ json1.name + `</td>
-		<td>`+ json1.address + `</td>
-		<td>`+ json1.job + `</td>
-		<td>`+ json1.website + `</td>
-		<td>`+ json2.banned + `</td>
-		<td>
-	<a href="/profile?id=`+ i + `" class="btn btn-primary btn-xs">
-		<i class="fa fa-folder"></i> View Profile</a>
-	<a href="/add-friend?id=`+ i + `" class="btn btn-info btn-xs">
-		<i class="fa fa-pencil"></i> Add Friend </a>
-	<a href="/ban?id=`+ i + `" class="btn btn-danger btn-xs">
-		<i class="fa fa-trash-o"></i> Ban </a>
-</td>
-</tr>
-`;
+					<td>`+ json1.name + `</td>
+					<td>`+ json1.address + `</td>
+					<td>`+ json1.job + `</td>
+					<td>`+ json1.website + `</td>
+					<td>`+ json2.banned + `</td>
+					friendlistoption
+					</tr>`;
+				if(mode == 'normal'){
+					friendlist.toString().replace('friendlistoption', `<td>
+						<a href="/profile?id=`+ i + `" class="btn btn-primary btn-xs">
+							<i class="fa fa-folder"></i> View Profile</a>
+						<a href="/add-friend?id=`+ i + `" class="btn btn-info btn-xs">
+							<i class="fa fa-pencil"></i> Add Friend </a>
+						<a href="/ban?id=`+ i + `" class="btn btn-danger btn-xs">
+							<i class="fa fa-trash-o"></i> Ban </a>
+						</td>`);
+				}
+				else if(mode == 'mobile'){
+					friendlist.toString().replace('friendlistoption','');
+				}
 			}
 
 
@@ -820,6 +830,33 @@ app.post('/api/add-friend', function (req, res) {
 	}
 
 	res.send('Success');
+})
+
+app.get('/api/mprofile/:id', function (req, res) {
+	if (fs.existsSync('database/account/' + req.params.id + '.json')) {
+		var panel = fs.readFileSync('app/panel/dashboard.html');
+		var profile1 = fs.readFileSync('database/profile/' + req.params.id + '.json');
+		var json1 = JSON.parse(profile1);
+		panel = panel.toString().replace('madcatavatar', json1.avatar);
+		panel = panel.toString().replace('madcatname', json1.name);
+		panel = panel.toString().replace('madcataddress', json1.address);
+		panel = panel.toString().replace('madcatjob', json1.job);
+		panel = panel.toString().replace('madcatwebsite', json1.website);
+		panel = panel.toString().replace('madcatgioithieu', json1.description);
+		panel = panel.toString().replace('madcatp1', json1.p1);
+		panel = panel.toString().replace('madcatp2', json1.p2);
+		panel = panel.toString().replace('madcatp3', json1.p3);
+		panel = panel.toString().replace('madcatp4', json1.p4);
+		panel = panel.toString().replace('madcatid', req.params.id);
+		var friendlist = FriendList(req.params.id, 'mobile');
+		panel = panel.toString().replace('madcatfriendlist', friendlist);
+
+		var html = mainpage(panel, req.params.id, '', 'Anonymous', 'mobile');
+		res.send(html);
+	}
+	else {
+		res.send('User not found');
+	}
 })
 
 app.post('/api/authenticate', function (req, res) {
