@@ -38,7 +38,8 @@ Room content:
 
     if(json1.type == 'message'){
       // socket.emit('room', chatcolor + username + '</a>: ' + $('#m').val());
-      socket.emit(room, chatcolor + username + '</a>: ' + $('#m').val());
+      socket.emit(room, json1.message);
+      // window.postMessage();
     }
   });
 </script>
