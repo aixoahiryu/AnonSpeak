@@ -26,12 +26,12 @@ Room content:
     $('#message').append($('<li>').html(msg));
   });
 
-  document.addEventListener("message", function(event) {
+  window.addEventListener("message", function(event) {
   	json1 = JSON.parse(event.data);
 
     if(json1.type == 'content'){
     	$('#message').html(unescape(json1.html));
-		window.scrollTo(0,document.body.scrollHeight);
+		  window.scrollTo(0,document.body.scrollHeight);
     }
 
     if(json1.type == 'message'){
