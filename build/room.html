@@ -20,7 +20,7 @@ Room content:
   var socket = io();
 
   var room = 'room1'
-  socket.on(room, function (msg) {
+  socket.on('room1', function (msg) {
     $('#messages').append($('<li>').html(msg));
   });
 
@@ -28,7 +28,7 @@ Room content:
   	json1 = JSON.parse(event.data);
 
     if(json1.type == 'room'){
-      room = json1.room
+      room = json1.room;
     }
 
     if(json1.type == 'content'){
