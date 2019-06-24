@@ -16,9 +16,8 @@ Room content:
     $('#message').append($('<li>').html(msg));
   });
 
-  this.window.addEventListener("message", function(event) {
-  	json1 = JSON.parse(event.nativeEvent.data);
-    console.log(event);
+  document.addEventListener("message", function(event) {
+  	json1 = JSON.parse(event.data);
 
     if(json1.type == 'content'){
     	$('#message').html(unescape(json1.html));
