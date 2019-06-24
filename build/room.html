@@ -20,7 +20,7 @@ Room content:
   var old_id = 0;
   var socket = io("https://anon-speak.herokuapp.com/");
 
-  socket.on(madcatroom, function (msg) {
+  socket.on('room1', function (msg) {
     $('#message').append($('<li>').html(msg));
   });
 
@@ -34,7 +34,7 @@ Room content:
 
     if(json1.type == 'message'){
       // socket.emit('room', chatcolor + username + '</a>: ' + $('#m').val());
-      socket.emit(madcatroom, json1.message);
+      socket.emit('room1', json1.message);
       // window.postMessage();
     }
   });
