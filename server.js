@@ -134,7 +134,8 @@ function FriendList(id, mode = 'normal') {
 					friendlistoption
 					</tr>`;
 				if(mode == 'normal'){
-					friendlist.toString().replace('friendlistoption', `<td>
+					while(friendlist.toString().includes('friendlistoption')){
+						friendlist = friendlist.toString().replace('friendlistoption', `<td>
 						<a href="/profile?id=`+ i + `" class="btn btn-primary btn-xs">
 							<i class="fa fa-folder"></i> View Profile</a>
 						<a href="/add-friend?id=`+ i + `" class="btn btn-info btn-xs">
@@ -142,9 +143,12 @@ function FriendList(id, mode = 'normal') {
 						<a href="/ban?id=`+ i + `" class="btn btn-danger btn-xs">
 							<i class="fa fa-trash-o"></i> Ban </a>
 						</td>`);
+					}
 				}
 				else if(mode == 'mobile'){
-					friendlist.toString().replace('friendlistoption','');
+					while(friendlist.toString().includes('friendlistoption')){
+						friendlist = friendlist.toString().replace('friendlistoption','');
+					}
 				}
 			}
 
