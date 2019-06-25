@@ -30,7 +30,8 @@ var topmenu = fs.readFileSync('app/topmenu.html');
 var content = fs.readFileSync('app/content.html');
 var footer = fs.readFileSync('app/footer.html');
 
-function mainpage(panel, username, room, type, mode = 'normal') {
+function mainpage(panel, username, room, type, mode = 'normal', title = '') {
+	content = content.toString().replace('madcattitle', title);
 	var sidebar2 = sidebar.toString().replace('madcat28651', username);
 	sidebar2 = sidebar2.toString().replace('User', type);
 	var topmenu2 = topmenu.toString().replace('madcat28651', username);
@@ -861,7 +862,7 @@ app.get('/api/mprofile/:id', function (req, res) {
 		var friendlist = FriendList(req.params.id, 'mobile');
 		panel = panel.toString().replace('madcatfriendlist', friendlist);
 
-		var html = mainpage(panel, req.params.id, '', 'Anonymous', 'mobile');
+		var html = mainpage(panel, req.params.id, '', 'Anonymous', 'mobile', req.params.id);
 		res.send(html);
 	}
 	else {
