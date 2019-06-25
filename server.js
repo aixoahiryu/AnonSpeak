@@ -828,6 +828,33 @@ app.post('/api/account', function (req, res) {
 	else { res.send("Failed"); }
 })
 
+app.post('/api/register', function (req, res) {
+	var json1 = {
+		"password": "",
+		"banned": "0",
+		"unread": ""
+	};
+	json1.password = req.body.password;
+	var json2 = {
+		"avatar": "https://store.playstation.com/store/api/chihiro/00_09_000/container/TR/tr/99/EP2402-CUSA05624_00-AV00000000000098//image?_version=00_09_000&platform=chihiro&w=720&h=720&bg_color=000000&opacity=100",
+		"name": "Samuel Doe",
+		"address": "San Francisco, California, USA",
+		"job": "Software Engineer",
+		"website": "www.kimlabs.com",
+		"description": "Giới thiệu",
+		"p1": "10",
+		"p2": "20",
+		"p3": "30",
+		"p4": "40"
+	};
+	var userdata = JSON.stringify(json1);
+	fs.writeFileSync('database/account/' + req.body.username + '.json', userdata);
+	var userdata = JSON.stringify(json2);
+	fs.writeFileSync('database/profile/' + req.body.username + '.json', userdata);
+
+	res.send('Success');
+})
+
 app.post('/api/add-friend', function (req, res) {
 	if (req.body.friendid != '' && fs.existsSync('database/account/' + req.body.id + '.json')) {
 		if (fs.existsSync('database/friendlist/' + req.body.id + '.json') == false) {
