@@ -31,7 +31,6 @@ var content = fs.readFileSync('app/content.html');
 var footer = fs.readFileSync('app/footer.html');
 
 function mainpage(panel, username, room, type, mode = 'normal', title = '') {
-	content = content.toString().replace('madcattitle', title);
 	var sidebar2 = sidebar.toString().replace('madcat28651', username);
 	sidebar2 = sidebar2.toString().replace('User', type);
 	var topmenu2 = topmenu.toString().replace('madcat28651', username);
@@ -57,10 +56,13 @@ function mainpage(panel, username, room, type, mode = 'normal', title = '') {
 	topmenu2 = topmenu2.toString().replace('madcatnotice', NoticeList());
 	topmenu2 = topmenu2.toString().replace('noticenum', noticei);
 	if(mode == 'normal'){
+		content = content.toString().replace('madcattitle', '');
 		return header + sidebar2 + topmenu2 + content + panel + footer2;
 	}
 	else if(mode == 'mobile'){
-		return header + content + panel;
+		content2 = fs.readFileSync('app/content.html');
+		content2 = content2.toString().replace('madcattitle', title);
+		return header + content2 + panel;
 	}
 }
 
