@@ -59,7 +59,7 @@ function mainpage(panel, username, room, type, mode = 'normal') {
 		return header + sidebar2 + topmenu2 + content + panel + footer2;
 	}
 	else if(mode == 'mobile'){
-		return header + content + panel + footer2;
+		return header + content + panel;
 	}
 }
 
@@ -161,13 +161,19 @@ function FriendList(id, mode = 'normal') {
 			<th>Nghề nghiệp</th>
 			<th>Website</th>
 			<th>Banned</th>
-			<th>#Edit</th>
+			friendlistedit
 		</tr>
 	</thead>
 	<tbody>
 	`+ friendlist + `
 	</tbody>
 	</table>`
+	if(mode == 'normal'){
+		friendlist.toString().replace('friendlistedit', '<th>#Edit</th>');
+	}
+	else if(mode == 'mobile'){
+		friendlist.toString().replace('friendlistedit','');
+	}
 
 
 	return friendlist;
