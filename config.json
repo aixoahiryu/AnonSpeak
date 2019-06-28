@@ -1,5 +1,8 @@
 {
 	"port": 80,
 	"server_mode": true,
-	"remote": "https://anon-speak.herokuapp.com/"
+	"notification": "none",
+	"p2p": false,
+	"remote": "https://anon-speak.herokuapp.com/",
+	"_remote": "http://localhost/"
 }
