@@ -282,7 +282,12 @@ app.post('/login', function (req, res) {
 	res.set('Content-Type', 'Text/Html');
 	if (req.body.username != '') {
 		res.cookie('username', req.body.username, { maxAge: 900000000, httpOnly: true });
-		res.redirect('/');
+		if(req.body.mode == 'mbasic'){
+			res.redirect('/mbasic');
+		}
+		else{
+			res.redirect('/');
+		}
 	}
 	else { res.send("Login failed"); }
 })
@@ -296,7 +301,12 @@ app.post('/login2', function (req, res) {
 		if (req.body.password == json1.password) {
 			res.cookie('username', req.body.username, { maxAge: 900000000, httpOnly: true });
 			res.cookie('user', '1', { maxAge: 900000000, httpOnly: true });
-			res.redirect('/');
+			if(req.body.mode == 'mbasic'){
+				res.redirect('/mbasic');
+			}
+			else{
+				res.redirect('/');
+			}
 		}
 	}
 	else { res.send("Login failed"); }
@@ -328,7 +338,12 @@ app.post('/register', function (req, res) {
 
 	res.cookie('username', req.body.username, { maxAge: 900000000, httpOnly: true });
 	res.cookie('user', '1', { maxAge: 900000000, httpOnly: true });
-	res.redirect('/');
+	if(req.body.mode == 'mbasic'){
+		res.redirect('/mbasic');
+	}
+	else{
+		res.redirect('/');
+	}
 })
 
 app.post('/loginX', function (req, res) {
@@ -489,7 +504,12 @@ app.post('/options', function (req, res) {
 	
 	io.emit('update', JSON.stringify( {"type":"profile", "id": req.cookies["username"]} ));
 
-	res.redirect('/options');
+	if(req.body.mode == 'mbasic'){
+		res.redirect('/mbasic/options');
+	}
+	else{
+		res.redirect('/options');
+	}
 })
 
 app.post('/options2', function (req, res) {
@@ -500,7 +520,12 @@ app.post('/options2', function (req, res) {
 		json1.password = req.body.password_1;
 		var userdata = JSON.stringify(json1);
 		fs.writeFileSync('database/account/' + req.cookies["username"] + '.json', userdata);
-		res.redirect('/options');
+		if(req.body.mode == 'mbasic'){
+			res.redirect('/mbasic/options');
+		}
+		else{
+			res.redirect('/options');
+		}
 	}
 	else { res.send("Đổi mật khẩu không thành công"); }
 
@@ -757,6 +782,164 @@ app.post('/admin/notice', function (req, res) {
 	fs.writeFileSync('database/thongbao', req.body.description);
 
 	res.redirect('/admin/notice');
+})
+
+//---------------------Mbasic--------------------
+app.get('/mbasic', function (req, res) {
+	if (req.cookies["username"] == null) {
+		res.redirect('/mbasic/login');
+	}
+	else {
+		res.redirect('/mbasic/menu');
+	}
+})
+
+app.get('/mbasic/login', function (req, res) {
+	res.set('Content-Type', 'Text/Html');
+
+	var html = fs.readFileSync('app/mbasic/login.html');
+	res.send(html);
+})
+
+app.get('/mbasic/logout', function (req, res) {
+	res.clearCookie("tutorial");
+	res.clearCookie("username");
+	res.clearCookie("user");
+
+	res.redirect('/mbasic/login');
+})
+
+app.get('/mbasic/menu', function (req, res) {
+	res.set('Content-Type', 'Text/Html');
+
+	var html = fs.readFileSync('app/mbasic/chatroom.html');
+	html = html.toString().replace('madcatprofile', req.cookies["username"])
+	res.send(html);
+})
+
+// app.post('/mbasic/login', function (req, res) {
+
+// 	res.set('Content-Type', 'Text/Html');
+// 	if (req.body.username != '') {
+// 		res.cookie('username', req.body.username, { maxAge: 900000000, httpOnly: true });
+// 		res.redirect('/mbasic');
+// 	}
+// 	else { res.send("Login failed"); }
+// })
+
+// app.post('/mbasic/login2', function (req, res) {
+
+// 	res.set('Content-Type', 'Text/Html');
+// 	if (fs.existsSync('database/account/' + req.body.username + '.json')) {
+// 		var userdata = fs.readFileSync('database/account/' + req.body.username + '.json');
+// 		var json1 = JSON.parse(userdata);
+// 		if (req.body.password == json1.password) {
+// 			res.cookie('username', req.body.username, { maxAge: 900000000, httpOnly: true });
+// 			res.cookie('user', '1', { maxAge: 900000000, httpOnly: true });
+// 			res.redirect('/mbasic');
+// 		}
+// 	}
+// 	else { res.send("Login failed"); }
+// })
+
+// app.post('/mbasic/register', function (req, res) {
+// 	var json1 = {
+// 		"password": "",
+// 		"banned": "0",
+// 		"unread": ""
+// 	};
+// 	json1.password = req.body.password;
+// 	var json2 = {
+// 		"avatar": "https://store.playstation.com/store/api/chihiro/00_09_000/container/TR/tr/99/EP2402-CUSA05624_00-AV00000000000098//image?_version=00_09_000&platform=chihiro&w=720&h=720&bg_color=000000&opacity=100",
+// 		"name": "Samuel Doe",
+// 		"address": "San Francisco, California, USA",
+// 		"job": "Software Engineer",
+// 		"website": "www.kimlabs.com",
+// 		"description": "Giới thiệu",
+// 		"p1": "10",
+// 		"p2": "20",
+// 		"p3": "30",
+// 		"p4": "40"
+// 	};
+// 	var userdata = JSON.stringify(json1);
+// 	fs.writeFileSync('database/account/' + req.body.username + '.json', userdata);
+// 	var userdata = JSON.stringify(json2);
+// 	fs.writeFileSync('database/profile/' + req.body.username + '.json', userdata);
+
+// 	res.cookie('username', req.body.username, { maxAge: 900000000, httpOnly: true });
+// 	res.cookie('user', '1', { maxAge: 900000000, httpOnly: true });
+// 	res.redirect('/mbasic');
+// })
+
+app.get('/mbasic/r/:id', function (req, res) {
+	res.setHeader("Content-Type", "text/html");
+
+	menu = fs.readFileSync('app/mbasic/eink.html');
+	menu = menu.toString().replace('"."', '"./'+req.params.id+'"')
+	chatdata = fs.readFileSync('database/chatroom/' + req.params.id + '.txt');
+	while(chatdata.toString().includes('href="/profile')){
+		chatdata = chatdata.toString().replace('href="/profile','href="/mbasic/profile');
+	}
+	inputhtml = fs.readFileSync('app/mbasic/input.html');
+	inputhtml = inputhtml.toString().replace('roomid', req.params.id);
+
+	res.send(menu + chatdata + inputhtml);
+})
+
+app.post('/mbasic/r', function (req, res) {
+	var username = req.cookies["username"];
+	var chatcolor = '<font>';
+	if (req.cookies["user"] == '1') chatcolor = '<a style="color:blue" href="/profile?id=' + username + '">';
+
+	io.emit('room' + req.body.room, chatcolor + username + '</a>: ' + req.body.msg);
+	fs.appendFileSync('database/chatroom/'+req.body.room+'.txt', '<li>' + chatcolor + username + '</a>: ' + req.body.msg + '</li> \r\n');
+	res.redirect('/mbasic/r/'+req.body.room);
+})
+
+app.get('/mbasic/profile', function (req, res) {
+	if (fs.existsSync('database/account/' + req.query.id + '.json')) {
+		menu = fs.readFileSync('app/mbasic/eink.html');
+		var panel = fs.readFileSync('app/panel/dashboard.html');
+		var profile1 = fs.readFileSync('database/profile/' + req.query.id + '.json');
+		var json1 = JSON.parse(profile1);
+		panel = panel.toString().replace('madcatavatar', json1.avatar);
+		panel = panel.toString().replace('madcatname', json1.name);
+		panel = panel.toString().replace('madcataddress', json1.address);
+		panel = panel.toString().replace('madcatjob', json1.job);
+		panel = panel.toString().replace('madcatwebsite', json1.website);
+		panel = panel.toString().replace('madcatgioithieu', json1.description);
+		panel = panel.toString().replace('madcatp1', json1.p1);
+		panel = panel.toString().replace('madcatp2', json1.p2);
+		panel = panel.toString().replace('madcatp3', json1.p3);
+		panel = panel.toString().replace('madcatp4', json1.p4);
+		panel = panel.toString().replace('madcatid', req.query.id);
+		var friendlist = FriendList(req.query.id, 'mobile');
+		panel = panel.toString().replace('madcatfriendlist', friendlist);
+		res.send(menu + panel);
+	}
+	else {
+		res.send('User not found');
+	}
+})
+
+app.get('/mbasic/options', function (req, res) {
+	res.set('Content-Type', 'Text/Html');
+	menu = fs.readFileSync('app/mbasic/eink.html');
+	var panel = fs.readFileSync('app/mbasic/options.html');
+	var profile1 = fs.readFileSync('database/profile/' + req.cookies["username"] + '.json');
+	var json1 = JSON.parse(profile1);
+	panel = panel.toString().replace('madcatavatar', json1.avatar);
+	panel = panel.toString().replace('madcatname', json1.name);
+	panel = panel.toString().replace('madcataddress', json1.address);
+	panel = panel.toString().replace('madcatjob', json1.job);
+	panel = panel.toString().replace('madcatwebsite', json1.website);
+	panel = panel.toString().replace('madcatgioithieu', json1.description);
+	panel = panel.toString().replace('madcatp1', json1.p1);
+	panel = panel.toString().replace('madcatp2', json1.p2);
+	panel = panel.toString().replace('madcatp3', json1.p3);
+	panel = panel.toString().replace('madcatp4', json1.p4);
+
+	res.send(menu + panel);
 })
 
 //----------------------API----------------------
